@@ -3,18 +3,26 @@ import Users from '../models/Users-models';
 import { UsersModelInterface } from '../models/Users-models'
 import usersViews from '../views/users-views';
 import cripto from 'crypto';
+import * as Yup from 'yup';
 
 export default class {
     async create(request: Request, response: Response) {
-        const data = request.body
-        const user = new Users
+        const data = request.body;
+
+        const schema = Yup.object().shape({
+            name: Yup.string().required(),
+            gender: Yup.string().required().equals(['masculino', 'feminino', 'outros'])
+        });
+
+        await schema.validate(data, {
+            abortEarly: false
+        });
+
         const hash = cripto.randomBytes(6).toString('hex');
+        const user = new Users
+
         await user.create({ ...data, id: hash }, (err, doc) => {
-            if (err) {
-                console.log(err);
-                return response.status(500).json({});
-            }
-            response.status(201).json(usersViews.render(doc as UsersModelInterface))
+            response.status(201).json(usersViews.render(doc as UsersModelInterface));
         });
         return
 
@@ -28,6 +36,14 @@ export default class {
 
     async show(request: Request, response: Response) {
         const { id } = request.params
+
+        const schema = Yup.object().shape({
+            id: Yup.string().required().length(12)
+        });
+        await schema.validate({ id }, {
+            abortEarly: false
+        });
+
         const user = new Users;
         const result = await user.read(id) as UsersModelInterface
         return response.status(200).json(usersViews.render(result));
@@ -35,12 +51,25 @@ export default class {
 
     async update(request: Request, response: Response) {
         const { id } = request.params;
-        const data = request.body;
+        const { name, gender } = request.body;
+        const data = {
+            id,
+            name,
+            gender
+        }
+
+        const schema = Yup.object().shape({
+            id: Yup.string().required().length(12),
+            name: Yup.string().required(),
+            gender: Yup.string().required().equals(['masculino', 'feminino', 'outros'])
+        });
+
+        await schema.validate(data, {
+            abortEarly: false
+        })
+
         const user = new Users;
-        await user.update({ ...data, id }, (err, raw) => {
-            if (err) {
-                return response.status(500).json({});
-            }
+        await user.update(data, (err, raw) => {
             const { n } = raw;
             return n as number == 1 ? (
                 response.status(204).json({})
@@ -51,12 +80,18 @@ export default class {
     }
 
     async delete(request: Request, response: Response) {
-        const { id } = request.params;
+        const { id } = request.params
+
+        const schema = Yup.object().shape({
+            id: Yup.string().required().length(12)
+        });
+
+        await schema.validate({ id }, {
+            abortEarly: false
+        });
+
         const user = new Users;
         await user.delete(id, (err) => {
-            if (err) {
-                return response.status(500).json({});
-            }
             return response.status(204).json({})
         })
     }

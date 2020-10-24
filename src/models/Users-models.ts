@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import '../services/database/connection';
 
 
 const userSchema = new Schema(
@@ -20,13 +19,13 @@ export interface UsersModelInterface {
 
 
 class Users {
-    async create(data: UsersModelInterface, callBack: (err: any, doc: {}) => void) {
+    async create(data: UsersModelInterface, callBack?: (err: any, doc: {}) => void) {
         const user = new UsersModel(data);
         return await user.save(callBack);
     }
 
-    async read(id?: string): Promise<unknown[] | unknown> {
-        return id ? await UsersModel.findOne({ id }) : await UsersModel.find();
+    async read(id?: string, callBack?: (err: any, doc: {}) => void): Promise<unknown[] | unknown> {
+        return id ? await UsersModel.findOne({ id }, callBack) : await UsersModel.find(callBack);
     }
 
     async update(data: UsersModelInterface, callback?: (err: any, raw: any) => void) {
