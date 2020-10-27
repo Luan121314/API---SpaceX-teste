@@ -5,7 +5,9 @@ const userSchema = new Schema(
     {
         id: String,
         name: String,
-        gender: String
+        gender: String,
+        about: String,
+        github: String
     }, { collection: 'users' }
 )
 const UsersModel = model('users', userSchema);
@@ -14,7 +16,9 @@ export interface UsersModelInterface {
 
     id?: string
     name: string,
-    gender: string
+    gender: string,
+    about: string,
+    github: string
 }
 
 
@@ -29,8 +33,8 @@ class Users {
     }
 
     async update(data: UsersModelInterface, callback?: (err: any, raw: any) => void) {
-        const { gender, name, id } = data;
-        await UsersModel.updateOne({ id }, { name, gender }, callback);
+        const {about, github, gender, name, id } = data;
+        await UsersModel.updateOne({ id }, { name, about, github, gender }, callback);
     }
     async delete(id: string, callback?: (err: any) => void) {
         await UsersModel.deleteOne({id}, callback);

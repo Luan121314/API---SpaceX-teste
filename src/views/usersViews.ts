@@ -1,4 +1,4 @@
-import { UsersModelInterface } from "../models/Users-models";
+import { UsersModelInterface } from "../models/UsersModels";
 
 export default {
     render(user: UsersModelInterface) {
@@ -6,7 +6,9 @@ export default {
         return user ? {
             id: user.id || null,
             name: user.name || null,
-            gender: user.gender || null
+            gender: user.gender || null,
+            about: user.about || null,
+            github: user.github || null
         } : {}
     },
     renderMany(users: UsersModelInterface[]) {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import Users from '../models/Users-models';
-import { UsersModelInterface } from '../models/Users-models'
-import usersViews from '../views/users-views';
+import Users from '../models/UsersModels';
+import { UsersModelInterface } from '../models/UsersModels'
+import usersViews from '../views/usersViews';
 import cripto from 'crypto';
 import * as Yup from 'yup';
 
@@ -11,7 +11,9 @@ export default class {
 
         const schema = Yup.object().shape({
             name: Yup.string().required(),
-            gender: Yup.string().required().equals(['masculino', 'feminino', 'outros'])
+            gender: Yup.string().required().equals(['masculino', 'feminino', 'outros']),
+            about: Yup.string().required(),
+            github: Yup.string().required()
         });
 
         await schema.validate(data, {
@@ -51,17 +53,21 @@ export default class {
 
     async update(request: Request, response: Response) {
         const { id } = request.params;
-        const { name, gender } = request.body;
+        const { name, gender, about, github } = request.body;
         const data = {
             id,
             name,
-            gender
+            gender,
+            about,
+            github
         }
 
         const schema = Yup.object().shape({
             id: Yup.string().required().length(12),
             name: Yup.string().required(),
-            gender: Yup.string().required().equals(['masculino', 'feminino', 'outros'])
+            gender: Yup.string().required().equals(['masculino', 'feminino', 'outros']),
+            about: Yup.string().required(),
+            github: Yup.string().required()
         });
 
         await schema.validate(data, {
