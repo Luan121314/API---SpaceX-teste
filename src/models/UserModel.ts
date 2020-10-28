@@ -10,9 +10,9 @@ const userSchema = new Schema(
         github: String
     }, { collection: 'users' }
 )
-const UsersModel = model('users', userSchema);
+const UserModel = model('users', userSchema);
 
-export interface UsersModelInterface {
+export interface UserModelInterface {
 
     id?: string
     name: string,
@@ -23,21 +23,21 @@ export interface UsersModelInterface {
 
 
 class Users {
-    async create(data: UsersModelInterface, callBack?: (err: any, doc: {}) => void) {
-        const user = new UsersModel(data);
+    async create(data: UserModelInterface, callBack?: (err: any, doc: {}) => void) {
+        const user = new UserModel(data);
         return await user.save(callBack);
     }
 
     async read(id?: string, callBack?: (err: any, doc: {}) => void): Promise<unknown[] | unknown> {
-        return id ? await UsersModel.findOne({ id }, callBack) : await UsersModel.find(callBack);
+        return id ? await UserModel.findOne({ id }, callBack) : await UserModel.find(callBack);
     }
 
-    async update(data: UsersModelInterface, callback?: (err: any, raw: any) => void) {
+    async update(data: UserModelInterface, callback?: (err: any, raw: any) => void) {
         const {about, github, gender, name, id } = data;
-        await UsersModel.updateOne({ id }, { name, about, github, gender }, callback);
+        await UserModel.updateOne({ id }, { name, about, github, gender }, callback);
     }
     async delete(id: string, callback?: (err: any) => void) {
-        await UsersModel.deleteOne({id}, callback);
+        await UserModel.deleteOne({id}, callback);
     }
 }
 

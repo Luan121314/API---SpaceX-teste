@@ -1,7 +1,7 @@
-import { UsersModelInterface } from "../models/UsersModels";
+import { UserModelInterface } from "../models/UserModel";
 
 export default {
-    render(user: UsersModelInterface) {
+    render(user: UserModelInterface) {
 
         return user ? {
             id: user.id || null,
@@ -11,7 +11,7 @@ export default {
             github: user.github || null
         } : {}
     },
-    renderMany(users: UsersModelInterface[]) {
+    renderMany(users: UserModelInterface[]) {
         return users.map(user => this.render(user))
     }
 }

@@ -6,24 +6,24 @@ const newsSchema = new Schema(
         id: String,
         title: String,
         headline: String,
-        news: String,
+        notice: String,
         publicationDate:Date  
-    }, { collection: 'news' }
+    }, { collection: 'notices' }
 )
-const NewsModel = model('news', newsSchema);
+const NewsModel = model('notice', newsSchema);
 
-export interface NewsModelInterface {
+export interface NoticeModelInterface {
 
     id: string
     title: string,
     headline: string,
-    news: string,
+    notice: string,
     publicationDate?: Date
 }
 
 
 class News {
-    async create(data: NewsModelInterface, callBack?: (err: any, doc: {}) => void) {
+    async create(data: NoticeModelInterface, callBack?: (err: any, doc: {}) => void) {
         const user = new NewsModel(data);
         return await user.save(callBack);
     }
@@ -32,9 +32,9 @@ class News {
         return id ? await NewsModel.findOne({ id }, callBack) : await NewsModel.find(callBack);
     }
 
-    async update(data: NewsModelInterface, callback?: (err: any, raw: any) => void) {
-        const { title, headline, news ,id } = data;
-        await NewsModel.updateOne({ id }, { title, headline, news }, callback);
+    async update(data: NoticeModelInterface, callback?: (err: any, raw: any) => void) {
+        const { title, headline, notice ,id } = data;
+        await NewsModel.updateOne({ id }, { title, headline, notice }, callback);
     }
     async delete(id: string, callback?: (err: any) => void) {
         await NewsModel.deleteOne({id}, callback);
