@@ -3,8 +3,8 @@ import 'express-async-errors';
 import routes  from './routes';
 import cors from 'cors';
 import dotenv  from 'dotenv';
-import errorHandler from '../src/errors/handler'
-import database from '../src/services/database/connection';
+import errorHandler from './errors/handler'
+import database from './services/database/connection';
 
 if(process.env.NODE_ENV != "PRODUCTION"){
     dotenv.config()

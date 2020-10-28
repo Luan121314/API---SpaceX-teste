@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
     "build": "sucrase ./src -d  ./dist --transforms typescript,imports",
-    "start": "node ./dist/server.js"
+    "start": "node ./dist/src/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
