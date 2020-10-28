@@ -65,7 +65,7 @@ var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
         const schema = Yup.object().shape({
             id: Yup.string().required().length(12),
             name: Yup.string().required(),
-            gender: Yup.string().required().equals(['masculino', 'feminino', 'outros']),
+            gender: Yup.string().required().equals(['Masculino', 'Feminino', 'Outros']),
             about: Yup.string().required(),
             github: Yup.string().required()
         });
