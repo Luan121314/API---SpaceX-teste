@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
-    "build": "sucrase ./src -d  ./dist --transforms typescript,imports",
+    "build": "sucrase ./src -d  ./dist/src --transforms typescript,imports",
     "start": "node ./dist/src/server.js"
   },
   "dependencies": {
