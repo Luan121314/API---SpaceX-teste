@@ -11,6 +11,10 @@ class ValidationGeneric {
         })
         return
     }
+
+    protected messageRequired(field:string){
+        return `O campo ${field} deve ser preenchido`
+    }
 }
 
 export default ValidationGeneric;

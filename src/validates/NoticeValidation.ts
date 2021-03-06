@@ -19,9 +19,9 @@ class NoticeValidation extends ValidationGeneric {
     async update(data: NoticeProps) {
         const scheme = yup.object().shape({
             id: yup.string().required(),
-            title: yup.string().required(),
-            headline: yup.string().required(),
-            notice: yup.string().required()
+            title: yup.string().required(this.messageRequired("titulo")),
+            headline: yup.string().required(this.messageRequired("manchete")),
+            notice: yup.string().required(this.messageRequired("noticia"))
         })
 
         await scheme.validate(data, {
@@ -31,9 +31,9 @@ class NoticeValidation extends ValidationGeneric {
 
     async create(data: UpdateNoticeProps) {
         const scheme = yup.object().shape({
-            title: yup.string().required(),
-            headline: yup.string().required(),
-            notice: yup.string().required()
+            title: yup.string().required(this.messageRequired("titulo")),
+            headline: yup.string().required(this.messageRequired("manchete")),
+            notice: yup.string().required(this.messageRequired("noticia"))
         })
 
         await scheme.validate(data, {

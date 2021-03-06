@@ -19,10 +19,10 @@ class UserValidation extends ValidationGeneric {
     async update(data: UserProps) {
         const scheme = yup.object().shape({
             id: yup.string().required(),
-            name: yup.string().required("O campo 'nome' deve ser preenchido"),
+            name: yup.string().required(this.messageRequired("nome")),
             gender: yup.string().required().equals(['Masculino', 'Feminino', 'Outros']),
-            about: yup.string().required("Campo 'sobre', deve ser preenchido"),
-            github: yup.string().required("Campo 'github', deve ser preenchido")
+            about: yup.string().required(this.messageRequired("sobre")),
+            github: yup.string().required(this.messageRequired("github"))
         })
 
         await scheme.validate(data, {
@@ -32,10 +32,10 @@ class UserValidation extends ValidationGeneric {
 
     async create(data: UpdateUserProps) {
         const scheme = yup.object().shape({
-            name: yup.string().required("O campo 'nome' deve ser preenchido"),
+            name: yup.string().required(this.messageRequired("nome")),
             gender: yup.string().required().equals(['Masculino', 'Feminino', 'Outros']),
-            about: yup.string().required("Campo 'sobre', deve ser preenchido"),
-            github: yup.string().required("Campo 'github', deve ser preenchido")
+            about: yup.string().required(this.messageRequired("sobre")),
+            github: yup.string().required(this.messageRequired("github"))
         })
 
         await scheme.validate(data, {
