@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import ValidationGeneric from './ValidationGenéric';
+import ValidationGeneric from './ValidationGeneric';
 
 interface NoticeProps {
     title: string;

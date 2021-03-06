@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import ValidationGeneric from './ValidationGenéric';
+import ValidationGeneric from './ValidationGeneric';
 
 interface UserProps {
     name: string;
@@ -20,7 +20,7 @@ class UserValidation extends ValidationGeneric {
         const scheme = yup.object().shape({
             id: yup.string().required(),
             name: yup.string().required(this.messageRequired("nome")),
-            gender: yup.string().required().equals(['Masculino', 'Feminino', 'Outros']),
+            gender: yup.string().required(this.messageRequired("genero")).equals(['Masculino', 'Feminino', 'Outros'], "O campo genero deve ser preecnchido com as seguintes opções, Masculino, Feminino ou Outros"),
             about: yup.string().required(this.messageRequired("sobre")),
             github: yup.string().required(this.messageRequired("github"))
         })
@@ -33,7 +33,7 @@ class UserValidation extends ValidationGeneric {
     async create(data: UpdateUserProps) {
         const scheme = yup.object().shape({
             name: yup.string().required(this.messageRequired("nome")),
-            gender: yup.string().required().equals(['Masculino', 'Feminino', 'Outros']),
+            gender: yup.string().required(this.messageRequired("genero")).equals(['Masculino', 'Feminino', 'Outros'], "O campo genero deve ser preecnchido com as seguintes opções, Masculino, Feminino ou Outros"),
             about: yup.string().required(this.messageRequired("sobre")),
             github: yup.string().required(this.messageRequired("github"))
         })
