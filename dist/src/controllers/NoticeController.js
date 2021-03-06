@@ -1,23 +1,15 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 var _NoticeModel = require('../models/NoticeModel'); var _NoticeModel2 = _interopRequireDefault(_NoticeModel);
 
 var _noticeView = require('../views/noticeView'); var _noticeView2 = _interopRequireDefault(_noticeView);
 var _crypto = require('crypto'); var _crypto2 = _interopRequireDefault(_crypto);
-var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
+var _NoticeValidation = require('../validates/NoticeValidation'); var _NoticeValidation2 = _interopRequireDefault(_NoticeValidation);
 
  class Notice {
     async create(request, response) {
         const data = request.body;
 
-        const schema = Yup.object().shape({
-            title: Yup.string().required(),
-            headline: Yup.string().required(),
-            notice: Yup.string().required()
-        });
-
-        await schema.validate(data, {
-            abortEarly: false
-        });
+        await _NoticeValidation2.default.create(data);
 
         const hash = _crypto2.default.randomBytes(6).toString('hex');
         const publicationDate = new Date().toISOString();
@@ -39,12 +31,7 @@ var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
     async show(request, response) {
         const { id } = request.params
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12)
-        });
-        await schema.validate({ id }, {
-            abortEarly: false
-        });
+        await _NoticeValidation2.default.id({ id })
 
         const noticie = new _NoticeModel2.default;
         const result = await noticie.read(id) 
@@ -61,16 +48,7 @@ var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
             notice
         } 
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12),
-            title: Yup.string().required(),
-            headline: Yup.string().required(),
-            notice: Yup.string().required()
-        });
-
-        await schema.validate(data, {
-            abortEarly: false
-        })
+        await _NoticeValidation2.default.update(data)
 
         const noticie = new _NoticeModel2.default;
         await noticie.update(data, (err, raw) => {
@@ -78,7 +56,7 @@ var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
             return n  == 1 ? (
                 response.status(204).json({})
             ) : (
-                    response.status(404).json({ message: 'id not found' }))
+                response.status(404).json({ message: 'id not found' }))
         })
         return
     }
@@ -86,17 +64,11 @@ var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
     async delete(request, response) {
         const { id } = request.params
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12)
-        });
-
-        await schema.validate({ id }, {
-            abortEarly: false
-        });
+        await _NoticeValidation2.default.id({id})
 
         const noticie = new _NoticeModel2.default;
         await noticie.delete(id, (err) => {
-            return response.status(204).json({})
+            return response.sendStatus(204)
         })
     }
 } exports.default = Notice;
