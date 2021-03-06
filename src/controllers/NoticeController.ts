@@ -3,21 +3,13 @@ import NoticeModel from '../models/NoticeModel';
 import { NoticeModelInterface } from '../models/NoticeModel'
 import NoticeView from '../views/noticeView';
 import cripto from 'crypto';
-import * as Yup from 'yup';
+import noticesValidation from '../validates/NoticesValidation';
 
 export default class Notice {
     async create(request: Request, response: Response) {
         const data = request.body;
 
-        const schema = Yup.object().shape({
-            title: Yup.string().required(),
-            headline: Yup.string().required(),
-            notice: Yup.string().required()
-        });
-
-        await schema.validate(data, {
-            abortEarly: false
-        });
+        await noticesValidation.create(data);
 
         const hash = cripto.randomBytes(6).toString('hex');
         const publicationDate = new Date().toISOString();
@@ -39,12 +31,7 @@ export default class Notice {
     async show(request: Request, response: Response) {
         const { id } = request.params
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12)
-        });
-        await schema.validate({ id }, {
-            abortEarly: false
-        });
+        await noticesValidation.id({ id })
 
         const noticie = new NoticeModel;
         const result = await noticie.read(id) as NoticeModelInterface
@@ -61,16 +48,7 @@ export default class Notice {
             notice
         } as NoticeModelInterface
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12),
-            title: Yup.string().required(),
-            headline: Yup.string().required(),
-            notice: Yup.string().required()
-        });
-
-        await schema.validate(data, {
-            abortEarly: false
-        })
+        await noticesValidation.update(data)
 
         const noticie = new NoticeModel;
         await noticie.update(data, (err, raw) => {
@@ -78,7 +56,7 @@ export default class Notice {
             return n as number == 1 ? (
                 response.status(204).json({})
             ) : (
-                    response.status(404).json({ message: 'id not found' }))
+                response.status(404).json({ message: 'id not found' }))
         })
         return
     }
@@ -86,17 +64,11 @@ export default class Notice {
     async delete(request: Request, response: Response) {
         const { id } = request.params
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12)
-        });
-
-        await schema.validate({ id }, {
-            abortEarly: false
-        });
+        await noticesValidation.id({id})
 
         const noticie = new NoticeModel;
         await noticie.delete(id, (err) => {
-            return response.status(204).json({})
+            return response.sendStatus(204)
         })
     }
 }
