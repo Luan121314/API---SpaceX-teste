@@ -3,22 +3,13 @@ import UserModel from '../models/UserModel';
 import { UserModelInterface } from '../models/UserModel'
 import usersViews from '../views/userView';
 import cripto from 'crypto';
-import * as Yup from 'yup';
+import userValidation from '../validates/UserValidation';
 
-export default class User{
+export default class User {
     async create(request: Request, response: Response) {
         const data = request.body;
 
-        const schema = Yup.object().shape({
-            name: Yup.string().required(),
-            gender: Yup.string().required().equals(['Masculino', 'Feminino', 'Outros']),
-            about: Yup.string().required(),
-            github: Yup.string().required()
-        });
-
-        await schema.validate(data, {
-            abortEarly: false
-        });
+        await userValidation.create(data)
 
         const hash = cripto.randomBytes(6).toString('hex');
         const user = new UserModel
@@ -39,12 +30,7 @@ export default class User{
     async show(request: Request, response: Response) {
         const { id } = request.params
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12)
-        });
-        await schema.validate({ id }, {
-            abortEarly: false
-        });
+        await userValidation.id({ id })
 
         const user = new UserModel;
         const result = await user.read(id) as UserModelInterface
@@ -62,17 +48,7 @@ export default class User{
             github
         }
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12),
-            name: Yup.string().required(),
-            gender: Yup.string().required().equals(['Masculino', 'Feminino', 'Outros']),
-            about: Yup.string().required(),
-            github: Yup.string().required()
-        });
-
-        await schema.validate(data, {
-            abortEarly: false
-        })
+        await userValidation.update(data)
 
         const user = new UserModel;
         await user.update(data, (err, raw) => {
@@ -80,7 +56,7 @@ export default class User{
             return n as number == 1 ? (
                 response.status(204).json({})
             ) : (
-                    response.status(404).json({ message: 'id not found' }))
+                response.status(404).json({ message: 'id not found' }))
         })
         return
     }
@@ -88,13 +64,7 @@ export default class User{
     async delete(request: Request, response: Response) {
         const { id } = request.params
 
-        const schema = Yup.object().shape({
-            id: Yup.string().required().length(12)
-        });
-
-        await schema.validate({ id }, {
-            abortEarly: false
-        });
+        await userValidation.id({ id })
 
         const user = new UserModel;
         await user.delete(id, (err) => {

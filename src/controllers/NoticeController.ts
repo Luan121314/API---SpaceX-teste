@@ -3,7 +3,7 @@ import NoticeModel from '../models/NoticeModel';
 import { NoticeModelInterface } from '../models/NoticeModel'
 import NoticeView from '../views/noticeView';
 import cripto from 'crypto';
-import noticesValidation from '../validates/NoticesValidation';
+import noticesValidation from '../validates/NoticeValidation';
 
 export default class Notice {
     async create(request: Request, response: Response) {
