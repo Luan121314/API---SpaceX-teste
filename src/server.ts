@@ -1,12 +1,12 @@
-import express from 'express';
+import dotenv from 'dotenv';
+if(process.env.NODE_ENV !== "PRODUCTION") dotenv.config();
 import 'express-async-errors';
-import routes  from './routes';
+import express from 'express';
 import cors from 'cors';
+import routes  from './routes';
 import errorHandler from './errors/handler'
 import database from './services/database/connection';
-import dotenv from 'dotenv';
-
-if(process.env.NODE_ENV !== "PRODUCTION") dotenv.config();
+import manifest from './manifest';
 
 const app = express();
 app.use(cors());
@@ -15,7 +15,7 @@ app.use(routes);
 app.use(errorHandler);
 database();
 
-const port = process.env.PORT || 3333;
+const {port} = manifest.server;
 app.listen(port, ()=>{
     console.log(`Server running in port ${port} `);
 });

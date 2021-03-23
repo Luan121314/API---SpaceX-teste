@@ -1,20 +1,19 @@
+import manifest from '../../manifest';
 import mongoose from 'mongoose';
 
 const connection = () => {
-    const password = process.env.PASSWORD;
-    const dbName = process.env.DATABASE_NAME;
-    const urlConnetion = `mongodb+srv://user01:${password}@mongodatabase01-7udss.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+    const {databaseName, password} = manifest.database;
+    const uri = `mongodb+srv://user01:${password}@mongodatabase01-7udss.mongodb.net/${databaseName}?retryWrites=true&w=majority`;
+    const connectionOptions = {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        appname: databaseName,
+        autoIndex: true
+    }
     
-    mongoose.connect(urlConnetion,
-        {
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-            appname: dbName,
-            autoIndex: true
-        }, err => {
+    mongoose.connect(uri, connectionOptions, err => {
             if (err) {
                 console.log(err);
-
                 return
             };
             console.log('Database conected ')
